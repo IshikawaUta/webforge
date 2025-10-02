@@ -1,0 +1,256 @@
+/* style.css - Versi FINAL dan KOREKSI TOTAL (Pseudo-Element Stabil) */
+
+/* ========================================= */
+/* 1. Variabel CSS & Global Styling */
+/* ========================================= */
+
+:root {
+    --primary-color: #ffffff; 
+    --secondary-color: #00408a; 
+    --hero-bg-blue: #2196F3; 
+    --teks-blue: #2196F3;
+    --dark-text: #333; 
+    --light-bg: #ffffff; 
+    
+    --border-radius-card: 10px;
+    --led-border-width: 5px; /* Ketebalan border */
+    --led-glow-color: #00bfff;
+    --anim-duration: 3s; 
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    color: var(--dark-text);
+    background-color: #f4f7f6;
+}
+
+/* Kustomisasi Tombol Utama */
+.custom-btn {
+    background-color: var(--primary-color) !important;
+    border-color: var(--teks-blue) !important;
+    color: var(--teks-blue) !important;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+.custom-btn:hover {
+    background-color: #8f8f8f !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    transform: translateY(-2px);
+}
+
+/* ========================================= */
+/* 2. Styling Navigasi */
+/* ========================================= */
+
+.navbar-light .navbar-brand {
+    color: var(--dark-text);
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    position: relative;
+    padding-bottom: 8px; 
+    transition: color 0.3s ease;
+    color: #555; 
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0; 
+    height: 3px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--hero-bg-blue); 
+    transition: width 0.3s ease-out, left 0.3s ease-out; 
+}
+
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+    width: 100%;
+    left: 0;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--dark-text) !important; 
+}
+
+/* ========================================= */
+/* 3. Hero Section */
+/* ========================================= */
+
+.hero-section {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--hero-bg-blue); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.hero-content {
+    position: relative; 
+    z-index: 2; 
+    padding: 20px;
+}
+
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1; 
+    background-color: var(--hero-bg-blue); 
+}
+
+.animate-on-load {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInSlideUp 1s ease-out forwards 0.5s;
+}
+
+@keyframes fadeInSlideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================= */
+/* 4. Service Cards (SOLUSI PSEUDO-ELEMENT AKHIR) */
+/* ========================================= */
+
+.icon-hover {
+    transition: color 0.3s ease;
+}
+
+.service-card:hover .icon-hover {
+    color: var(--secondary-color) !important; 
+}
+
+/* Dasar Card (Container) */
+.service-card {
+    padding: 0 !important; 
+    border: none;
+    border-radius: var(--border-radius-card);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); 
+}
+
+/* Hover Card LED Biru Merah (Container Border) */
+.led-card {
+    position: relative;
+    overflow: hidden; /* KRUSIAL: Memotong gradien yang melebar */
+    z-index: 2; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: transparent; /* HARUS TRANSPARAN */
+    border-radius: var(--border-radius-card);
+    padding: 0.5px; /* KRUSIAL: Memberi border area 1px solid */
+}
+
+.led-card:hover {
+    transform: translateY(2px); 
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); 
+}
+
+/* KONTEN KARTU (MASKER PUTIH) */
+.card-content {
+    /* MASKER SOLID dan Lapisan Paling Atas */
+    position: relative;
+    z-index: 3; 
+    background-color: var(--light-bg); 
+    padding: 0.5rem; 
+    border-radius: calc(var(--border-radius-card) - 1px);
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+/* Solusi Masking: Konten sedikit mengecil saat hover, memperlihatkan border LED */
+.led-card:hover .card-content {
+    /* MASKER mengecil 2%, memperjelas ruang border animasi */
+    transform: scale(0.98); 
+}
+
+
+/* Pseudo-elemen untuk Border LED */
+.led-card::before,
+.led-card::after {
+    content: '';
+    position: absolute;
+    
+    /* Posisikan di luar card */
+    top: calc(-1 * var(--led-border-width)); 
+    left: calc(-1 * var(--led-border-width));
+    
+    /* Background Conic Gradient untuk Rotasi */
+    background: conic-gradient(
+        from 0deg,
+        #00bfff, 
+        #0077ff 20%, 
+        #00bfff 40%, 
+        #0077ff 60%, 
+        #00bfff 80%, 
+        #0077ff 100%
+    );
+    
+    width: calc(100% + 1 * var(--led-border-width)); 
+    height: calc(100% + 1 * var(--led-border-width));
+    
+    z-index: 1; /* Di bawah masker (card-content) */
+    
+    border-radius: calc(var(--border-radius-card) + 1px); 
+    opacity: 0; 
+    transition: opacity 0.3s ease, transform 0s; 
+}
+
+/* Animasi Rotasi pada Gradien */
+@keyframes led-border-rotate {
+    to { 
+        transform: rotate(360deg); 
+    }
+}
+
+/* Saat Hover, Border LED Muncul dan Beranimasi */
+.led-card:hover::before {
+    opacity: 1; 
+    transform-origin: center center;
+    /* ROTASI AKTIF */
+    animation: led-border-rotate var(--anim-duration) linear infinite; 
+}
+
+/* Efek kedua untuk glow */
+.led-card::after {
+    filter: blur(10px); 
+    opacity: 0; 
+    z-index: 0; 
+    transition: opacity 0.3s ease;
+}
+
+.led-card:hover::after {
+    opacity: 1;
+    transform-origin: center center;
+    animation: led-border-rotate var(--anim-duration) linear infinite reverse; 
+}
+
+
+/* Portfolio Hover Effect */
+.hover-grow {
+    transition: transform 0.3s ease;
+}
+
+.hover-grow:hover {
+    transform: scale(1.03);
+}
+
+/* Responsiveness adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        height: 70vh;
+    }
+}
